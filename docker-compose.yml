@@ -16,7 +16,7 @@ services:
     volumes:
         - ./data:/data/db
 
-  mongo-client:
+  client:
     image: mongoclient/mongoclient
     environment:
         - MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/
