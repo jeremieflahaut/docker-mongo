@@ -1,0 +1,27 @@
+version: '3'
+services:
+  mongodb:
+    build: 
+      context: ./.docker/mongo
+      args:
+        USER_ID: ${USER_ID:-0}
+        GROUP_ID: ${GROUP_ID:-0}
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+        MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+        MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    restart: unless-stopped
+    ports:
+        - ${MONGO_PORT}:27017
+    volumes:
+        - ./data:/data/db
+
+  mongo-client:
+    image: mongoclient/mongoclient
+    environment:
+        - MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/
+    restart: unless-stopped
+    ports:
+        - ${MONGO_CLIENT_PORT}:3000
+    depends_on: 
+        - mongodb
